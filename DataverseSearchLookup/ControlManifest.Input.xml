@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+    <control namespace="UX"
+             constructor="DataverseSearchLookup"
+             version="0.0.15"
+             display-name-key="DataverseSearchLookup 0.0.01"
+             description-key="DataverseSearchLookup description"
+             control-type="virtual">
+        <external-service-usage enabled="false" />
+        <type-group name="textGroups">
+            <type>Multiple</type>
+            <type>SingleLine.Text</type>
+        </type-group>
+        <property name="lookupField"
+                  display-name-key="lookupField"
+                  description-key="Property_Desc_Key"
+                  of-type="Lookup.Simple"
+                  usage="bound"
+                  required="true" />
+        <property name="searchParameter"
+                  display-name-key="searchParameter"
+                  description-key="Property_Desc_Key"
+                  of-type="SingleLine.Text"
+                  usage="input"
+                  required="true" />
+        <property name="description"
+                  display-name-key="description"
+                  description-key="Property_Desc_Key"
+                  of-type-group="textGroups"
+                  usage="input"
+                  required="true" />
+        <property name="appearance"
+                  display-name-key="appearance"
+                  description-key="appearance"
+                  of-type="Enum"
+                  usage="input"
+                  default-value="filled">
+            <value name="filled"
+                   display-name-key="filled">filled</value>
+            <value name="subtle"
+                   display-name-key="subtle">subtle</value>
+            <value name="outline"
+                   display-name-key="outline">outline</value>
+            <value name="filled-alternative"
+                   display-name-key="filled-alternative">filled-alternative</value>
+        </property>
+        <property name="searchCount"
+                  display-name-key="searchCount"
+                  description-key="searchCount"
+                  of-type-group="textGroups"
+                  usage="output"
+                  required="false" />
+        <resources>
+            <code path="index.ts"
+                  order="1" />
+            <platform-library name="React"
+                              version="16.14.0" />
+            <platform-library name="Fluent"
+                              version="9.46.2" />
+        </resources>
+        <feature-usage>
+            <uses-feature name="Utility"
+                          required="true" />
+            <uses-feature name="WebAPI"
+                          required="true" />
+        </feature-usage>
+    </control>
+</manifest>
