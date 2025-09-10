@@ -1,4 +1,4 @@
-import { IInputs } from "./generated/ManifestTypes";
+import { IInputs } from "../generated/ManifestTypes";
 
 export interface SearchResult {
     Id: string;
@@ -92,7 +92,7 @@ export async function searchDataverse(
         if (!response.ok) {
             throw new Error(`Search failed: ${response.status} ${response.statusText}`);
         }
-
+        
         const result = await response.json() as { response: string };
         // Parse the nested response
         const searchResponse = JSON.parse(result.response) as SearchResponse;

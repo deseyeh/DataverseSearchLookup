@@ -6,8 +6,9 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
  
 import * as React from "react";
-import LookupRender from "./LookupRender";
+import LookupRender from "./Components/LookupRender";
 import { ILookUpProps } from "./types";
+import { AuthoringMode } from "./Components/AuthoringMode";
 
 export class DataverseSearchLookup implements ComponentFramework.ReactControl<IInputs, IOutputs> {
     private notifyOutputChanged: () => void;
@@ -35,9 +36,7 @@ export class DataverseSearchLookup implements ComponentFramework.ReactControl<II
         this.notifyOutputChanged = notifyOutputChanged;
         const { lookupField, searchParameter, } = context.parameters;
         const fieldLogicName = lookupField?.attributes?.LogicalName ?? "";
-        if (!searchParameter?.raw) {
-           this.handleHideControl(fieldLogicName as string);
-       }
+        
     }
 
     private  handleHideControl = (fieldLogicName: string) => {
@@ -56,15 +55,31 @@ export class DataverseSearchLookup implements ComponentFramework.ReactControl<II
      */
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
         const { lookupField, searchParameter, description, appearance } = context.parameters;
+        
+        console.log("isAuthoringMode", context.mode.isAuthoringMode as boolean | undefined);
+        // Check if we are in authoring mode
+        const isAuthoringMode = context.mode.isAuthoringMode as boolean | undefined;
+        if (isAuthoringMode) {
+            return React.createElement(AuthoringMode, { description: description.raw ?? "", cardAppearance: appearance.raw ?? "filled" });
+        }
+
         const targetEntities = lookupField?.attributes?.Targets;
         const fieldLogicName = lookupField?.attributes?.LogicalName ?? "";
-        const props: ILookUpProps = { 
+        const selectedValue = lookupField?.raw[0]?.id ?? "";
+        const searchParam = searchParameter?.raw ?? "";
+        //if no search parameter or there is lookup value, hide the control
+        const shouldHide = (selectedValue !== "" || searchParam === "");
+        if (shouldHide) {
+        this.handleHideControl(fieldLogicName as string);
+        }
+
+         const props: ILookUpProps = { 
             context: context,
             fieldLogicName: fieldLogicName,
             currentEntityName: lookupField?.attributes?.EntityLogicalName ?? "",
-            lookupRecordId: lookupField?.raw[0]?.id ??  "",
+            lookupRecordId: selectedValue,
             lookupEntityName: lookupField?.raw[0]?.name ?? targetEntities?.[0] ?? "",
-            searchParameter: searchParameter.raw ?? "",
+            searchParameter: searchParam,
             description: description.raw ?? "",
             cardAppearance: appearance.raw ?? "subtle",
             onConfirm: (selectedOption?: ComponentFramework.LookupValue[]) => { 
@@ -75,7 +90,8 @@ export class DataverseSearchLookup implements ComponentFramework.ReactControl<II
             },
             onDismiss: () => {
                 if (fieldLogicName) {
-                    this.handleHideControl(fieldLogicName as string);
+                     this.handleHideControl(fieldLogicName as string);
+                    console.log("Dismiss clicked");
                     this.notifyOutputChanged();
                 }
             }

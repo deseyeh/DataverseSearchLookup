@@ -2,8 +2,8 @@
 <manifest>
     <control namespace="UX"
              constructor="DataverseSearchLookup"
-             version="0.0.15"
-             display-name-key="DataverseSearchLookup 0.0.01"
+             version="0.0.20"
+             display-name-key="DataverseSearchLookup 0.0.1"
              description-key="DataverseSearchLookup description"
              control-type="virtual">
         <external-service-usage enabled="false" />
@@ -44,12 +44,6 @@
             <value name="filled-alternative"
                    display-name-key="filled-alternative">filled-alternative</value>
         </property>
-        <property name="searchCount"
-                  display-name-key="searchCount"
-                  description-key="searchCount"
-                  of-type-group="textGroups"
-                  usage="output"
-                  required="false" />
         <resources>
             <code path="index.ts"
                   order="1" />
